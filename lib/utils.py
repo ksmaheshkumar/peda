@@ -28,6 +28,9 @@ except: from io       import StringIO # Python3
 try:    unicode
 except: unicode = str
 
+import sys
+if sys.version[0]=="2": input=raw_input
+
 # http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 # http://stackoverflow.com/questions/8856164/class-decorator-decorating-method-in-python
 class memoized(object):
@@ -185,9 +188,8 @@ class message(object):
         if not teefd:
             teefd = config.Option.get("_teefd")
 
-        text = text.replace("\x00", colorize(".", "red", None))
-
         if (isinstance(text, str) or isinstance(text, unicode)):
+            text = text.replace("\x00", colorize(".", "red", None))
             print(colorize(text, color, attrib), file=self.out)
             if teefd:
                 print(colorize(text, color, attrib), file=teefd)
@@ -486,7 +488,7 @@ def format_reference_chain(chain):
     return text
 
 def split_disasm_line(line):
-    m = re.search("\s*(0x[^ ]+)\s*(?:<(.*)>)?[^:]*:\s*([^;]*(?:;(.*))?)", line)
+    m = re.search("\s*(0x[0-9a-fA-F]+)\s*(?:<(.*)>)?[^:]*:\s*([^;]*)(?:;(.*))?", line)
     if m is None:
         return None, None, None, None
     addr, name, inst, comment = m.groups()
