@@ -418,6 +418,8 @@ class PEDA(object):
         """
 
         thread = gdb.selected_thread()
+        if thread is None:
+            return None
         pid, lwpid, tid = thread.ptid
         return lwpid or tid
 
