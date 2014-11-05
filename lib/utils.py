@@ -535,7 +535,7 @@ def format_disasm_code(code, nearby=None):
         target = 0
 
     for line in code.splitlines():
-        if ":" not in line: # not an assembly line
+        if ":" not in line[:-1]: # not an assembly line
             result += line + "\n"
         else:
             color = style = None
@@ -545,6 +545,7 @@ def format_disasm_code(code, nearby=None):
                 result += line + "\n"
                 return
 
+            print("wapi", line)
             oaddr = re.search("\s*(0x[0-9a-fA-F]+)", line).group(1)
 
             opcode = inst.split(None, 1)[0]
